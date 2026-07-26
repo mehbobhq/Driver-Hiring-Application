@@ -337,15 +337,18 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
     operating_region: company?.operating_region ?? '',
     is_active: company?.is_active ?? true,
   });
+  const [slugTouched, setSlugTouched] = useState(Boolean(company?.slug));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     setError(null);
 
-    const slug = form.slug || form.company_name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const slug = form.slug || slugify(form.company_name);
 
     const payload = { ...form, slug, updated_at: new Date().toISOString() };
 
@@ -375,64 +378,84 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
-          <div className="overflow-y-auto flex-1 p-6 space-y-5">
+          <div className="overflow-y-auto flex-1 p-5 space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Company Name *">
-                <input type="text" required value={form.company_name} onChange={(e) => setForm({ ...form, company_name: e.target.value })} className="premium-input" placeholder="Acme Trucking" />
+                <input
+                  type="text"
+                  required
+                  value={form.company_name}
+                  onChange={(e) => {
+                    const company_name = e.target.value;
+                    setForm((f) => ({ ...f, company_name, slug: slugTouched ? f.slug : slugify(company_name) }));
+                  }}
+                  className="premium-input"
+                  placeholder="Acme Trucking"
+                />
               </Field>
-              <Field label="Slug (URL identifier)">
-                <input type="text" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className="premium-input" placeholder="acme-trucking" />
-              </Field>
-            </div>
-
-            <Field label="Operating Region *">
-              <select required value={form.operating_region} onChange={(e) => setForm({ ...form, operating_region: e.target.value })} className="premium-select">
-                <option value="">Select operating region...</option>
-                <option value="Canada Only">Canada Only</option>
-                <option value="US Only">US Only</option>
-                <option value="Cross-Border">Cross-Border</option>
-              </select>
-            </Field>
-
-            <Field label="Logo URL (optional)">
-              <input type="url" value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} className="premium-input" placeholder="https://example.com/logo.png" />
-            </Field>
-
-            <Field label="Tagline">
-              <input type="text" value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} className="premium-input" placeholder="Drive with the best" />
-            </Field>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <Field label="Contact Email">
-                <input type="email" value={form.contact_email} onChange={(e) => setForm({ ...form, contact_email: e.target.value })} className="premium-input" placeholder="hr@company.com" />
-              </Field>
-              <Field label="Contact Phone">
-                <input type="tel" value={form.contact_phone} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} className="premium-input" placeholder="(555) 123-4567" />
+              <Field label="Slug (URL identifier) *">
+                <input
+                  type="text"
+                  required
+                  value={form.slug}
+                  onChange={(e) => { setSlugTouched(true); setForm({ ...form, slug: e.target.value }); }}
+                  className="premium-input"
+                  placeholder="acme-trucking"
+                />
               </Field>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <Field label="Address">
-                <input type="text" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="premium-input" placeholder="123 Main St" />
+              <Field label="Operating Region *">
+                <select required value={form.operating_region} onChange={(e) => setForm({ ...form, operating_region: e.target.value })} className="premium-select">
+                  <option value="">Select operating region...</option>
+                  <option value="Canada Only">Canada Only</option>
+                  <option value="US Only">US Only</option>
+                  <option value="Cross-Border">Cross-Border</option>
+                </select>
               </Field>
-              <Field label="City">
-                <input type="text" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="premium-input" placeholder="Toronto" />
-              </Field>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-3">
-              <Field label="Province/State">
-                <input type="text" value={form.province_state} onChange={(e) => setForm({ ...form, province_state: e.target.value })} className="premium-input" placeholder="ON" />
-              </Field>
-              <Field label="Postal/Zip">
-                <input type="text" value={form.postal_zip_code} onChange={(e) => setForm({ ...form, postal_zip_code: e.target.value })} className="premium-input" placeholder="M1M 1M1" />
-              </Field>
-              <Field label="Country">
-                <select value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} className="premium-select">
+              <Field label="Country *">
+                <select required value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} className="premium-select">
                   <option value="CA">Canada</option>
                   <option value="US">United States</option>
                   <option value="OTHER">Other</option>
                 </select>
+              </Field>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Logo URL (optional)">
+                <input type="url" value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} className="premium-input" placeholder="https://example.com/logo.png" />
+              </Field>
+              <Field label="Tagline (optional)">
+                <input type="text" value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} className="premium-input" placeholder="Drive with the best" />
+              </Field>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Contact Email *">
+                <input type="email" required value={form.contact_email} onChange={(e) => setForm({ ...form, contact_email: e.target.value })} className="premium-input" placeholder="hr@company.com" />
+              </Field>
+              <Field label="Contact Phone *">
+                <input type="tel" required value={form.contact_phone} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} className="premium-input" placeholder="(555) 123-4567" />
+              </Field>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Address *">
+                <input type="text" required value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="premium-input" placeholder="123 Main St" />
+              </Field>
+              <Field label="City *">
+                <input type="text" required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="premium-input" placeholder="Toronto" />
+              </Field>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Province/State *">
+                <input type="text" required value={form.province_state} onChange={(e) => setForm({ ...form, province_state: e.target.value })} className="premium-input" placeholder="ON" />
+              </Field>
+              <Field label="Postal/Zip *">
+                <input type="text" required value={form.postal_zip_code} onChange={(e) => setForm({ ...form, postal_zip_code: e.target.value })} className="premium-input" placeholder="M1M 1M1" />
               </Field>
             </div>
 
