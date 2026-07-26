@@ -378,7 +378,11 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+<<<<<<< HEAD
           <div className="overflow-y-auto flex-1 p-5 space-y-4">
+=======
+          <div className="overflow-y-auto flex-1 p-4 space-y-3">
+>>>>>>> 164088e8651f5223e1f73402811c0085c205f7ae
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Company Name *">
                 <input
@@ -423,6 +427,7 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
               </Field>
             </div>
 
+<<<<<<< HEAD
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Logo URL (optional)">
                 <input type="url" value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} className="premium-input" placeholder="https://example.com/logo.png" />
@@ -433,6 +438,24 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
+=======
+            <div className="grid gap-4 md:grid-cols-3">
+              <Field label="Address *">
+                <input type="text" required value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="premium-input" placeholder="123 Main St" />
+              </Field>
+              <Field label="City *">
+                <input type="text" required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="premium-input" placeholder="Toronto" />
+              </Field>
+              <Field label="Province/State *">
+                <input type="text" required value={form.province_state} onChange={(e) => setForm({ ...form, province_state: e.target.value })} className="premium-input" placeholder="ON" />
+              </Field>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <Field label="Postal/Zip *">
+                <input type="text" required value={form.postal_zip_code} onChange={(e) => setForm({ ...form, postal_zip_code: e.target.value })} className="premium-input" placeholder="M1M 1M1" />
+              </Field>
+>>>>>>> 164088e8651f5223e1f73402811c0085c205f7ae
               <Field label="Contact Email *">
                 <input type="email" required value={form.contact_email} onChange={(e) => setForm({ ...form, contact_email: e.target.value })} className="premium-input" placeholder="hr@company.com" />
               </Field>
@@ -442,6 +465,7 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
+<<<<<<< HEAD
               <Field label="Address *">
                 <input type="text" required value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="premium-input" placeholder="123 Main St" />
               </Field>
@@ -456,6 +480,13 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
               </Field>
               <Field label="Postal/Zip *">
                 <input type="text" required value={form.postal_zip_code} onChange={(e) => setForm({ ...form, postal_zip_code: e.target.value })} className="premium-input" placeholder="M1M 1M1" />
+=======
+              <Field label="Logo URL (optional)">
+                <input type="url" value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} className="premium-input" placeholder="https://example.com/logo.png" />
+              </Field>
+              <Field label="Tagline (optional)">
+                <input type="text" value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} className="premium-input" placeholder="Drive with the best" />
+>>>>>>> 164088e8651f5223e1f73402811c0085c205f7ae
               </Field>
             </div>
 
@@ -488,7 +519,7 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-slate-700 mb-2">{label}</label>
+      <label className="block text-sm font-medium text-slate-700 mb-1">{label}</label>
       {children}
     </div>
   );
