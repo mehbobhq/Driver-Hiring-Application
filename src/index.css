@@ -1,0 +1,221 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   WHITE-LABEL BRAND VARIABLES
+   ============================================ */
+:root {
+  --brand-primary: #1e40af;
+  --brand-secondary: #0f172a;
+  --brand-accent: #06b6d4;
+}
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    scroll-behavior: smooth;
+    font-size: 15px;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-800 antialiased;
+  }
+
+  input, select, textarea {
+    @apply bg-white border-slate-300 text-slate-800 placeholder-slate-400;
+    @apply focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500;
+    @apply transition-all duration-200 ease-out;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    @apply outline-none ring-2 ring-blue-500/30 border-blue-500;
+  }
+
+  ::selection {
+    @apply bg-blue-500/20;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white border border-slate-200;
+    @apply rounded-xl shadow-sm;
+  }
+
+  .premium-input {
+    @apply w-full px-3.5 py-2.5 rounded-lg;
+    @apply bg-white border border-slate-300;
+    @apply text-slate-800 text-sm placeholder-slate-400;
+    @apply focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500;
+    @apply transition-all duration-200 ease-out;
+    @apply hover:border-slate-400;
+  }
+
+  .premium-input:focus {
+    @apply bg-white border-blue-500;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .premium-select {
+    @apply premium-input appearance-none cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 18px;
+    padding-right: 36px;
+  }
+
+  .toggle-btn {
+    @apply relative px-4 py-2.5 rounded-lg font-medium text-sm;
+    @apply border border-slate-300 bg-white;
+    @apply text-slate-600 transition-all duration-200 ease-out;
+    @apply hover:border-slate-400 hover:bg-slate-50;
+  }
+
+  .toggle-btn:hover {
+    @apply border-slate-400 bg-slate-50;
+  }
+
+  .toggle-btn.active {
+    @apply border-blue-500 bg-blue-50;
+    @apply text-blue-700 ring-1 ring-blue-500/20;
+  }
+
+  .toggle-btn.success.active {
+    @apply border-green-500 bg-green-50;
+    @apply text-green-700 ring-1 ring-green-500/20;
+  }
+
+  .toggle-btn.warning.active {
+    @apply border-amber-500 bg-amber-50;
+    @apply text-amber-700 ring-1 ring-amber-500/20;
+  }
+
+  .card-section {
+    @apply glass-card p-5 md:p-6 mb-5;
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .card-section:hover {
+    @apply border-slate-300;
+  }
+
+  .section-header {
+    @apply flex items-center gap-3 mb-5;
+  }
+
+  .section-title {
+    @apply text-base md:text-lg font-semibold text-slate-800;
+    @apply tracking-tight;
+  }
+
+  .icon-container {
+    @apply flex items-center justify-center w-10 h-10 rounded-lg;
+    @apply transition-all duration-200;
+  }
+
+  .icon-container.primary {
+    @apply bg-blue-100 text-blue-600;
+  }
+
+  .icon-container.success {
+    @apply bg-green-100 text-green-600;
+  }
+
+  .icon-container.warning {
+    @apply bg-amber-100 text-amber-600;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3;
+    @apply text-white font-medium text-sm rounded-lg;
+    @apply shadow-sm transition-all duration-200 ease-out;
+    @apply hover:shadow-md active:shadow-sm;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    background-color: var(--brand-primary);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--brand-primary);
+    filter: brightness(1.1);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5;
+    @apply bg-white border border-slate-300 text-slate-600;
+    @apply font-medium text-sm rounded-lg;
+    @apply transition-all duration-200 ease-out;
+    @apply hover:bg-slate-50 hover:border-slate-400 hover:text-slate-700;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5;
+    @apply bg-red-50 border border-red-200 text-red-600;
+    @apply font-medium text-sm rounded-lg;
+    @apply transition-all duration-200 ease-out;
+    @apply hover:bg-red-100;
+  }
+
+  .brand-bg {
+    background-color: var(--brand-primary);
+  }
+  .brand-text {
+    color: var(--brand-primary);
+  }
+  .brand-border {
+    border-color: var(--brand-primary);
+  }
+  .brand-ring {
+    box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.4s ease-out forwards;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scale-in {
+    animation: scaleIn 0.25s ease-out forwards;
+  }
+
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .progress-fill {
+    background: linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-accent) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+@media print {
+  body { @apply bg-white text-slate-900; font-size: 11pt; }
+  .no-print, .print-hidden, footer, nav { display: none !important; }
+  * { box-shadow: none !important; text-shadow: none !important; }
+  section { break-inside: avoid; page-break-inside: avoid; }
+  @page { size: A4; margin: 15mm; }
+}
+
+@media (max-width: 640px) {
+  html { font-size: 14px; }
+  .premium-input, .premium-select, .toggle-btn { font-size: 16px; }
+  .card-section { @apply p-4; }
+  .section-title { @apply text-base; }
+}
