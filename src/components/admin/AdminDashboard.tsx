@@ -322,6 +322,7 @@ function CompaniesView({ companies, onChanged }: { companies: Company[]; onChang
 }
 
 function CompanyFormModal({ company, onClose, onSaved }: { company: Company | null; onClose: () => void; onSaved: () => void }) {
+  const [step, setStep] = useState<1 | 2>(1);
   const [form, setForm] = useState({
     company_name: company?.company_name ?? '',
     slug: company?.slug ?? '',
@@ -342,6 +343,15 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
   const [error, setError] = useState<string | null>(null);
 
   const slugify = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  const goNext = () => {
+    if (!form.company_name.trim() || !form.slug.trim() || !form.operating_region || !form.country) {
+      setError('Please fill in all required fields before continuing.');
+      return;
+    }
+    setError(null);
+    setStep(2);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -371,129 +381,106 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/50" onClick={onClose}>
       <div className="my-auto bg-white rounded-2xl max-h-[90vh] w-full max-w-2xl flex flex-col overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex-shrink-0 border-b border-slate-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-slate-800">{company ? 'Edit Company' : 'New Company'}</h2>
+          <div>
+            <h2 className="text-lg font-semibold text-slate-800">{company ? 'Edit Company' : 'New Company'}</h2>
+            <p className="text-xs text-slate-400 mt-0.5">Step {step} of 2 — {step === 1 ? 'Basic Info' : 'Address & Contact'}</p>
+          </div>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
             <XCircle className="h-5 w-5" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
-<<<<<<< HEAD
           <div className="overflow-y-auto flex-1 p-5 space-y-4">
-=======
-          <div className="overflow-y-auto flex-1 p-4 space-y-3">
->>>>>>> 164088e8651f5223e1f73402811c0085c205f7ae
-            <div className="grid gap-4 md:grid-cols-2">
-              <Field label="Company Name *">
-                <input
-                  type="text"
-                  required
-                  value={form.company_name}
-                  onChange={(e) => {
-                    const company_name = e.target.value;
-                    setForm((f) => ({ ...f, company_name, slug: slugTouched ? f.slug : slugify(company_name) }));
-                  }}
-                  className="premium-input"
-                  placeholder="Acme Trucking"
-                />
-              </Field>
-              <Field label="Slug (URL identifier) *">
-                <input
-                  type="text"
-                  required
-                  value={form.slug}
-                  onChange={(e) => { setSlugTouched(true); setForm({ ...form, slug: e.target.value }); }}
-                  className="premium-input"
-                  placeholder="acme-trucking"
-                />
-              </Field>
-            </div>
+            {step === 1 && (
+              <>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field label="Company Name *">
+                    <input
+                      type="text"
+                      required
+                      value={form.company_name}
+                      onChange={(e) => {
+                        const company_name = e.target.value;
+                        setForm((f) => ({ ...f, company_name, slug: slugTouched ? f.slug : slugify(company_name) }));
+                      }}
+                      className="premium-input"
+                      placeholder="Acme Trucking"
+                    />
+                  </Field>
+                  <Field label="Slug (URL identifier) *">
+                    <input
+                      type="text"
+                      required
+                      value={form.slug}
+                      onChange={(e) => { setSlugTouched(true); setForm({ ...form, slug: e.target.value }); }}
+                      className="premium-input"
+                      placeholder="acme-trucking"
+                    />
+                  </Field>
+                </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <Field label="Operating Region *">
-                <select required value={form.operating_region} onChange={(e) => setForm({ ...form, operating_region: e.target.value })} className="premium-select">
-                  <option value="">Select operating region...</option>
-                  <option value="Canada Only">Canada Only</option>
-                  <option value="US Only">US Only</option>
-                  <option value="Cross-Border">Cross-Border</option>
-                </select>
-              </Field>
-              <Field label="Country *">
-                <select required value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} className="premium-select">
-                  <option value="CA">Canada</option>
-                  <option value="US">United States</option>
-                  <option value="OTHER">Other</option>
-                </select>
-              </Field>
-            </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field label="Operating Region *">
+                    <select required value={form.operating_region} onChange={(e) => setForm({ ...form, operating_region: e.target.value })} className="premium-select">
+                      <option value="">Select operating region...</option>
+                      <option value="Canada Only">Canada Only</option>
+                      <option value="US Only">US Only</option>
+                      <option value="Cross-Border">Cross-Border</option>
+                    </select>
+                  </Field>
+                  <Field label="Country *">
+                    <select required value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} className="premium-select">
+                      <option value="CA">Canada</option>
+                      <option value="US">United States</option>
+                      <option value="OTHER">Other</option>
+                    </select>
+                  </Field>
+                </div>
+              </>
+            )}
 
-<<<<<<< HEAD
-            <div className="grid gap-4 md:grid-cols-2">
-              <Field label="Logo URL (optional)">
-                <input type="url" value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} className="premium-input" placeholder="https://example.com/logo.png" />
-              </Field>
-              <Field label="Tagline (optional)">
-                <input type="text" value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} className="premium-input" placeholder="Drive with the best" />
-              </Field>
-            </div>
+            {step === 2 && (
+              <>
+                <div className="grid gap-4 md:grid-cols-3">
+                  <Field label="Address *">
+                    <input type="text" required value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="premium-input" placeholder="123 Main St" />
+                  </Field>
+                  <Field label="City *">
+                    <input type="text" required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="premium-input" placeholder="Toronto" />
+                  </Field>
+                  <Field label="Province/State *">
+                    <input type="text" required value={form.province_state} onChange={(e) => setForm({ ...form, province_state: e.target.value })} className="premium-input" placeholder="ON" />
+                  </Field>
+                </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-=======
-            <div className="grid gap-4 md:grid-cols-3">
-              <Field label="Address *">
-                <input type="text" required value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="premium-input" placeholder="123 Main St" />
-              </Field>
-              <Field label="City *">
-                <input type="text" required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="premium-input" placeholder="Toronto" />
-              </Field>
-              <Field label="Province/State *">
-                <input type="text" required value={form.province_state} onChange={(e) => setForm({ ...form, province_state: e.target.value })} className="premium-input" placeholder="ON" />
-              </Field>
-            </div>
+                <div className="grid gap-4 md:grid-cols-3">
+                  <Field label="Postal/Zip *">
+                    <input type="text" required value={form.postal_zip_code} onChange={(e) => setForm({ ...form, postal_zip_code: e.target.value })} className="premium-input" placeholder="M1M 1M1" />
+                  </Field>
+                  <Field label="Contact Email *">
+                    <input type="email" required value={form.contact_email} onChange={(e) => setForm({ ...form, contact_email: e.target.value })} className="premium-input" placeholder="hr@company.com" />
+                  </Field>
+                  <Field label="Contact Phone *">
+                    <input type="tel" required value={form.contact_phone} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} className="premium-input" placeholder="(555) 123-4567" />
+                  </Field>
+                </div>
 
-            <div className="grid gap-4 md:grid-cols-3">
-              <Field label="Postal/Zip *">
-                <input type="text" required value={form.postal_zip_code} onChange={(e) => setForm({ ...form, postal_zip_code: e.target.value })} className="premium-input" placeholder="M1M 1M1" />
-              </Field>
->>>>>>> 164088e8651f5223e1f73402811c0085c205f7ae
-              <Field label="Contact Email *">
-                <input type="email" required value={form.contact_email} onChange={(e) => setForm({ ...form, contact_email: e.target.value })} className="premium-input" placeholder="hr@company.com" />
-              </Field>
-              <Field label="Contact Phone *">
-                <input type="tel" required value={form.contact_phone} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} className="premium-input" placeholder="(555) 123-4567" />
-              </Field>
-            </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field label="Logo URL (optional)">
+                    <input type="url" value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} className="premium-input" placeholder="https://example.com/logo.png" />
+                  </Field>
+                  <Field label="Tagline (optional)">
+                    <input type="text" value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} className="premium-input" placeholder="Drive with the best" />
+                  </Field>
+                </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-<<<<<<< HEAD
-              <Field label="Address *">
-                <input type="text" required value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="premium-input" placeholder="123 Main St" />
-              </Field>
-              <Field label="City *">
-                <input type="text" required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className="premium-input" placeholder="Toronto" />
-              </Field>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <Field label="Province/State *">
-                <input type="text" required value={form.province_state} onChange={(e) => setForm({ ...form, province_state: e.target.value })} className="premium-input" placeholder="ON" />
-              </Field>
-              <Field label="Postal/Zip *">
-                <input type="text" required value={form.postal_zip_code} onChange={(e) => setForm({ ...form, postal_zip_code: e.target.value })} className="premium-input" placeholder="M1M 1M1" />
-=======
-              <Field label="Logo URL (optional)">
-                <input type="url" value={form.logo_url} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} className="premium-input" placeholder="https://example.com/logo.png" />
-              </Field>
-              <Field label="Tagline (optional)">
-                <input type="text" value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} className="premium-input" placeholder="Drive with the best" />
->>>>>>> 164088e8651f5223e1f73402811c0085c205f7ae
-              </Field>
-            </div>
-
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} className="w-5 h-5 rounded" />
-              <span className="text-sm text-slate-700">Company is active (drivers can receive invites)</span>
-            </label>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} className="w-5 h-5 rounded" />
+                  <span className="text-sm text-slate-700">Company is active (drivers can receive invites)</span>
+                </label>
+              </>
+            )}
 
             {error && (
               <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200">
@@ -503,12 +490,21 @@ function CompanyFormModal({ company, onClose, onSaved }: { company: Company | nu
             )}
           </div>
 
-          <div className="flex-shrink-0 border-t border-slate-200 px-6 py-4 flex gap-3 justify-end">
-            <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
-            <button type="submit" disabled={saving} className="btn-primary">
-              {saving ? <RefreshCw className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}
-              {company ? 'Save Changes' : 'Create Company'}
-            </button>
+          <div className="flex-shrink-0 border-t border-slate-200 px-6 py-4 flex gap-3 justify-between">
+            {step === 1 ? (
+              <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
+            ) : (
+              <button type="button" onClick={() => { setError(null); setStep(1); }} className="btn-secondary">Back</button>
+            )}
+
+            {step === 1 ? (
+              <button type="button" onClick={goNext} className="btn-primary">Next</button>
+            ) : (
+              <button type="submit" disabled={saving} className="btn-primary">
+                {saving ? <RefreshCw className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}
+                {company ? 'Save Changes' : 'Create Company'}
+              </button>
+            )}
           </div>
         </form>
       </div>
